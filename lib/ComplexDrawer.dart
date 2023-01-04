@@ -66,39 +66,41 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
     return Container(
       width: 200,
       color: Colorz.complexDrawerBlack,
-      child: ListView.builder(
-          itemCount: cdms.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) return controlTile();
-            CDM cdm = cdms[index];
-            bool selected = selectedIndex == index;
-            return ExpansionTile(
+      child: Expanded(
+        child: ListView.builder(
+            itemCount: cdms.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) return controlTile();
+              CDM cdm = cdms[index];
+              bool selected = selectedIndex == index;
+              return ExpansionTile(
 
-                onExpansionChanged: (z) {
-                  setState(() {
-                    selectedIndex = z?index:-1;
-                  });
-                },
-                leading: Icon(
-                  cdm.icon,
-                  color: Colors.white,
-                ),
-                title: Text(
-                  cdm.title,
-                  style: TextStyle(color: Colors.white),
-                ),
-                trailing: cdm.submenus.isEmpty
-                    ? null
-                    : Icon(
-                        selected
-                            ? Icons.keyboard_arrow_down
-                            : Icons.keyboard_arrow_up,
-                        color: Colors.white,
-                      ),
-                children: cdm.submenus.map((submenu) {
-                  return sMenuButton(submenu, false);
-                }).toList());
-          }),
+                  onExpansionChanged: (z) {
+                    setState(() {
+                      selectedIndex = z?index:-1;
+                    });
+                  },
+                  leading: Icon(
+                    cdm.icon,
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    cdm.title,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  trailing: cdm.submenus.isEmpty
+                      ? null
+                      : Icon(
+                          selected
+                              ? Icons.keyboard_arrow_down
+                              : Icons.keyboard_arrow_up,
+                          color: Colors.white,
+                        ),
+                  children: cdm.submenus.map((submenu) {
+                    return sMenuButton(submenu, false);
+                  }).toList());
+            }),
+      ),
     );
   }
 
@@ -143,20 +145,26 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
                   );
                 }),
           ),
-          accountButton(),
+          accountButton(isMini: true),
         ],
       ),
 
     );
   }
 
-  Widget accountButton(){
-    return Container(
-      height: 45,
-      width: 45,
+  Widget accountButton({bool isMini = false}){
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 300),
+      height:isMini?45: 55,
+      width:isMini?45: 55,
       decoration: BoxDecoration(
-          image:DecorationImage(image:NetworkImage(Urls.googleImg)) ,
-          borderRadius:BorderRadius.circular(12) ),
+          image:DecorationImage(
+              image:NetworkImage(Urls.googleImg),
+          fit: BoxFit.fill) ,
+          borderRadius:BorderRadius.circular(isMini?6:8),
+        
+
+      ),
     );
   }
   Widget accountTile(){
