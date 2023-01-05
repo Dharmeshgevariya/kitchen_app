@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kitchen_app/CDM.dart';
-import 'Urls.dart';
+
 import 'Colorz.dart';
+import 'Urls.dart';
 
 class ComplexDrawer extends StatefulWidget {
   const ComplexDrawer({Key? key}) : super(key: key);
@@ -14,20 +16,25 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(),
-      drawer: ComplexDrawerD(),
-      drawerScrimColor: Colors.transparent,
-      backgroundColor: Colorz.complexDrawerCanvasColor,
+        appBar: appBar(),
+        drawer: ComplexDrawerD(),
+        drawerScrimColor: Colors.transparent,
+        backgroundColor: Colors.white,
+
+
     );
   }
 
   appBar() {
     return AppBar(
+      iconTheme: IconTheme.of(context).copyWith(
+        color: Colors.white,
+      ),
       title: Text(
         "Complex Drawer",
-        style: TextStyle(color: Colors.black),
+        style: GoogleFonts.poppins(color: Colors.white),
       ),
-      backgroundColor: Colorz.complexDrawerCanvasColor,
+      backgroundColor: Colorz.complexDrawerDeepPurple,
     );
   }
 }
@@ -48,22 +55,32 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
     double width = MediaQuery.of(context).size.width;
     return Container(
       width: width,
-      child: row(),
-      color: Colorz.complexDrawerCanvasColor,
+        color: Colorz.complexDrawerCanvasTrasprentColor,
+      child:row()
     );
   }
 
   Widget row() {
-    return Row(
-      children: [
-        isExpanded ? blackIconTile() : blackIconMenu(),
-        invisibleSubMenus(),
-      ],
+    return GestureDetector(
+        onHorizontalDragUpdate:(e) {
+          if(e.delta.dx>0){
+            expandoOrShrinkDrawer();
+          }
+          else{
+            expandoOrShrinkDrawer();
+          }
+        },
+        child: Row(
+        children: [
+          isExpanded ? blackIconTile() : blackIconMenu(),
+          invisibleSubMenus(),
+        ],
+      ),
     );
   }
 
   Widget blackIconTile() {
-    return Container(
+    return  Container(
       width: 230,
       color: Colorz.complexDrawerBlack,
       child: Column(
@@ -77,9 +94,10 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
                   CDM cdm = cdms[index];
                   bool selected = selectedIndex == index;
                   return ExpansionTile(
+                      backgroundColor: Colorz.complexDrawersubDomainTiles,
                       onExpansionChanged: (z) {
                         setState(() {
-                          selectedIndex = z?index:-1;
+                          selectedIndex = z ? index : -1;
                         });
                       },
                       leading: Icon(
@@ -88,16 +106,16 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
                       ),
                       title: Text(
                         cdm.title,
-                        style: TextStyle(color: Colors.white),
+                        style: GoogleFonts.poppins( color: Colors.white),
                       ),
                       trailing: cdm.submenus.isEmpty
-                          ? null
+                          ? const SizedBox()
                           : Icon(
-                              selected
-                                  ? Icons.keyboard_arrow_down
-                                  : Icons.keyboard_arrow_up,
-                              color: Colors.white,
-                            ),
+                        selected
+                            ? Icons.keyboard_arrow_down
+                            : Icons.keyboard_arrow_up,
+                        color: Colors.white,
+                      ),
                       children: cdm.submenus.map((submenu) {
                         return sMenuButton(submenu, false);
                       }).toList());
@@ -107,81 +125,90 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
         ],
       ),
     );
+
   }
 
   Widget controlTile() {
-    return Padding(
-      padding: const EdgeInsets.only(top:20,bottom: 30.0),
-      child: ListTile(
-        leading: FlutterLogo(),
-        title: Text('Flutter Ship',style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.bold),),
-      onTap: expandoOrShrinkDrawer,
-      ),
-
-    );
-  }
-
-   Widget blackIconMenu() {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      width: 100,
-      color: Colorz.complexDrawerBlack,
-      child: Column(
-        children: [
-          controlButton(),
-          Expanded(
-            child: ListView.builder(
-                itemCount: cdms.length,
-                itemBuilder: (context, index) {
-                  //if (index == 0) return controlButton();
-                  return InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = index;
-                      });
-                    },
-                    child: Container(
-                      height: 45,
-                      alignment: Alignment.center,
-                      child: Icon(
-                        cdms[index].icon,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                }),
+    return  Padding(
+        padding: const EdgeInsets.only(top: 25, bottom: 10.0),
+        child: ListTile(
+          leading: FlutterLogo(),
+          title: Text(
+            'Flutter Ship',
+            style: GoogleFonts.roboto(
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          accountButton(),
-        ],
-      ),
-
-    );
+         /* onTap: expandoOrShrinkDrawer,*/
+        ),
+      );
   }
 
-  Widget accountButton({bool usePadding = true}){
+  Widget blackIconMenu() {
+    return AnimatedContainer(
+        duration: Duration(seconds: 300),
+        width: 100,
+        color: Colorz.complexDrawerBlack,
+        child: Column(
+          children: [
+            controlButton(),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: cdms.length,
+                  itemBuilder: (context, index) {
+                    //if (index == 0) return controlButton();
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = index;
+                        });
+                      },
+                      child: Container(
+                        height: 45,
+                        alignment: Alignment.center,
+                        child: Icon(
+                          cdms[index].icon,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  }),
+            ),
+            accountButton(),
+          ],
+        ),
+      );
+  }
+
+  Widget accountButton({bool usePadding = true}) {
     return Padding(
-      padding: EdgeInsets.all(usePadding?8:0),
+      padding: EdgeInsets.all(usePadding ? 8 : 0),
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
-        height:45,
-        width:45,
+        height: 45,
+        width: 45,
         decoration: BoxDecoration(
-            image:DecorationImage(
-                image:NetworkImage(Urls.googleImg),
-            fit: BoxFit.fill) ,
-            borderRadius:BorderRadius.circular(6),
+          color: Colors.white70,
+          image: DecorationImage(
+              image: NetworkImage(Urls.googleImg), fit: BoxFit.fill),
+          borderRadius: BorderRadius.circular(6),
         ),
       ),
     );
   }
 
-  Widget accountTile(){
+  Widget accountTile() {
     return Container(
       color: Colorz.complexDrawerBlueGrey,
       child: ListTile(
         leading: accountButton(usePadding: false),
-        title: Text("Dharmesh Gevariya",style: TextStyle(color:Colors.white,fontSize: 12 ),),
-        subtitle: Text("gevariya.d@gmail.com",style: const TextStyle(color:Colors.white70,fontSize: 10 ),),
+        title: Text(
+          "Dharmesh Gevariya",
+          style: TextStyle( color: Colors.white, fontSize: 12),
+        ),
+        subtitle: Text(
+          "gevariya.d@gmail.com",
+          style: const TextStyle( color: Colors.white70, fontSize: 10),
+        ),
       ),
     );
   }
@@ -190,37 +217,45 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
     return AnimatedContainer(
         duration: Duration(milliseconds: 300),
         width: isExpanded ? 0 : 125,
-        color: Colorz.complexDrawerCanvasColor,
+        color: Colorz.complexDrawerCanvasTrasprentColor,
         alignment: Alignment.center,
-        child: ListView.builder(
-            itemCount: cdms.length,
-            itemBuilder: (context, index) {
-              CDM cmd = cdms[index];
-              if (cmd == null)
-                return Container(
-                  height: 95,
-                );
-              bool selected = selectedIndex == index;
-              bool isValidSubMenu = selected && cmd.submenus.isNotEmpty;
+        child: Column(
+          children: [
+            Container(height: 95),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: cdms.length,
+                  itemBuilder: (context, index) {
+                    CDM cmd = cdms[index];
+                    /*if (cmd == null)
+                      return Container(
+                        height: 95,
+                      );*/
+                    bool selected = selectedIndex == index;
+                    bool isValidSubMenu = selected && cmd.submenus.isNotEmpty;
 
-              return subMenuWidget(
-                  [cmd.title]..addAll(cmd.submenus), isValidSubMenu);
+                    return subMenuWidget(
+                        [cmd.title]..addAll(cmd.submenus), isValidSubMenu);
 
-              return invisibleSubMenusWidget();
-            }));
+                    return invisibleSubMenusWidget();
+                  }),
+            ),
+          ],
+        ));
   }
 
   Widget controlButton() {
     return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 35),
+      padding: const EdgeInsets.only(top: 30, bottom: 35),
       child: InkWell(
-        onTap: expandoOrShrinkDrawer,
+       // onTap: expandoOrShrinkDrawer,
         child: Container(
           height: 45,
           child: FlutterLogo(),
         ),
       ),
-    );
+
+   );
   }
 
   Widget invisibleSubMenusWidget() {
@@ -232,7 +267,7 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
   Widget subMenuWidget(List<String> submenus, bool isValidSubMenu) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 300),
-      height: isValidSubMenu ? submenus.length.toDouble()*37.5: 45,
+      height: isValidSubMenu ? submenus.length.toDouble() * 37.5 : 45,
       alignment: Alignment.center,
       decoration: BoxDecoration(
           color: isValidSubMenu
@@ -261,6 +296,7 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
         child: Text(
           subMenu,
           style: TextStyle(
+              fontFamily: 'Rowdies',
               color: isTitle ? Colors.white : Colors.grey[100],
               fontSize: isTitle ? 17 : 14,
               fontWeight: isTitle ? FontWeight.bold : FontWeight.normal),
@@ -286,7 +322,14 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
     CDM(Icons.markunread_mailbox_outlined, "Posts", ["Blog", "Affilate"]),
     CDM(Icons.pie_chart_outline, "Analytics", []),
     CDM(Icons.trending_up_outlined, "Chart", []),
-    CDM(Icons.power_outlined, "Plugins", ["HTML & CSS", "Javascript","Blog", "Affilate"]),
+    CDM(Icons.power_outlined, "Plugins",
+        ["HTML & CSS", "Javascript", "Blog", "Affilate"]),
+    CDM(Icons.explore_outlined, "Explore", []),
+    CDM(Icons.settings_outlined, "Settings", []),
+    CDM(Icons.explore_outlined, "Explore", []),
+    CDM(Icons.settings_outlined, "Settings", []),
+    CDM(Icons.explore_outlined, "Explore", []),
+    CDM(Icons.settings_outlined, "Settings", []),
     CDM(Icons.explore_outlined, "Explore", []),
     CDM(Icons.settings_outlined, "Settings", []),
     CDM(Icons.explore_outlined, "Explore", []),
