@@ -64,42 +64,47 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
 
   Widget blackIconTile() {
     return Container(
-      width: 200,
+      width: 230,
       color: Colorz.complexDrawerBlack,
-      child: Expanded(
-        child: ListView.builder(
-            itemCount: cdms.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0) return controlTile();
-              CDM cdm = cdms[index];
-              bool selected = selectedIndex == index;
-              return ExpansionTile(
-
-                  onExpansionChanged: (z) {
-                    setState(() {
-                      selectedIndex = z?index:-1;
-                    });
-                  },
-                  leading: Icon(
-                    cdm.icon,
-                    color: Colors.white,
-                  ),
-                  title: Text(
-                    cdm.title,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  trailing: cdm.submenus.isEmpty
-                      ? null
-                      : Icon(
-                          selected
-                              ? Icons.keyboard_arrow_down
-                              : Icons.keyboard_arrow_up,
-                          color: Colors.white,
-                        ),
-                  children: cdm.submenus.map((submenu) {
-                    return sMenuButton(submenu, false);
-                  }).toList());
-            }),
+      child: Column(
+        children: [
+          controlTile(),
+          Expanded(
+            child: ListView.builder(
+                itemCount: cdms.length,
+                itemBuilder: (BuildContext context, int index) {
+                  //if (index == 0) return controlTile();
+                  CDM cdm = cdms[index];
+                  bool selected = selectedIndex == index;
+                  return ExpansionTile(
+                      onExpansionChanged: (z) {
+                        setState(() {
+                          selectedIndex = z?index:-1;
+                        });
+                      },
+                      leading: Icon(
+                        cdm.icon,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        cdm.title,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      trailing: cdm.submenus.isEmpty
+                          ? null
+                          : Icon(
+                              selected
+                                  ? Icons.keyboard_arrow_down
+                                  : Icons.keyboard_arrow_up,
+                              color: Colors.white,
+                            ),
+                      children: cdm.submenus.map((submenu) {
+                        return sMenuButton(submenu, false);
+                      }).toList());
+                }),
+          ),
+          accountTile(),
+        ],
       ),
     );
   }
@@ -123,11 +128,12 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
       color: Colorz.complexDrawerBlack,
       child: Column(
         children: [
+          controlButton(),
           Expanded(
             child: ListView.builder(
                 itemCount: cdms.length,
                 itemBuilder: (context, index) {
-                  if (index == 0) return controlButton();
+                  //if (index == 0) return controlButton();
                   return InkWell(
                     onTap: () {
                       setState(() {
@@ -145,30 +151,39 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
                   );
                 }),
           ),
-          accountButton(isMini: true),
+          accountButton(),
         ],
       ),
 
     );
   }
 
-  Widget accountButton({bool isMini = false}){
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 300),
-      height:isMini?45: 55,
-      width:isMini?45: 55,
-      decoration: BoxDecoration(
-          image:DecorationImage(
-              image:NetworkImage(Urls.googleImg),
-          fit: BoxFit.fill) ,
-          borderRadius:BorderRadius.circular(isMini?6:8),
-        
-
+  Widget accountButton({bool usePadding = true}){
+    return Padding(
+      padding: EdgeInsets.all(usePadding?8:0),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        height:45,
+        width:45,
+        decoration: BoxDecoration(
+            image:DecorationImage(
+                image:NetworkImage(Urls.googleImg),
+            fit: BoxFit.fill) ,
+            borderRadius:BorderRadius.circular(6),
+        ),
       ),
     );
   }
+
   Widget accountTile(){
-    return Container();
+    return Container(
+      color: Colorz.complexDrawerBlueGrey,
+      child: ListTile(
+        leading: accountButton(usePadding: false),
+        title: Text("Dharmesh Gevariya",style: TextStyle(color:Colors.white,fontSize: 12 ),),
+        subtitle: Text("gevariya.d@gmail.com",style: const TextStyle(color:Colors.white70,fontSize: 10 ),),
+      ),
+    );
   }
 
   Widget invisibleSubMenus() {
@@ -265,13 +280,17 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
   ];*/
 
   static List<CDM> cdms = [
-    CDM(Icons.grid_view_outlined, "Control", []),
+    //CDM(Icons.grid_view_outlined, "Control", []),
     CDM(Icons.grid_view_outlined, "Dashboard", []),
     CDM(Icons.subscriptions_outlined, "Category", ["HTML & CSS", "Javascript"]),
     CDM(Icons.markunread_mailbox_outlined, "Posts", ["Blog", "Affilate"]),
     CDM(Icons.pie_chart_outline, "Analytics", []),
     CDM(Icons.trending_up_outlined, "Chart", []),
     CDM(Icons.power_outlined, "Plugins", ["HTML & CSS", "Javascript","Blog", "Affilate"]),
+    CDM(Icons.explore_outlined, "Explore", []),
+    CDM(Icons.settings_outlined, "Settings", []),
+    CDM(Icons.explore_outlined, "Explore", []),
+    CDM(Icons.settings_outlined, "Settings", []),
     CDM(Icons.explore_outlined, "Explore", []),
     CDM(Icons.settings_outlined, "Settings", []),
   ];
