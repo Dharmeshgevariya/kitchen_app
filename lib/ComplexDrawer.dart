@@ -17,7 +17,7 @@ class _ComplexDrawerState extends State<ComplexDrawer> {
       appBar: appBar(),
       drawer: ComplexDrawerD(),
       drawerScrimColor: Colors.transparent,
-      backgroundColor: Colorz.complexDrawerCanvasColor,
+      backgroundColor: Colors.white,
     );
   }
 
