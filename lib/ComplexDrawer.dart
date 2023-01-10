@@ -61,22 +61,12 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
   }
 
   Widget row() {
-    return GestureDetector(
-        onHorizontalDragUpdate:(e) {
-          if(e.delta.dx>0){
-            expandoOrShrinkDrawer();
-          }
-          else{
-            expandoOrShrinkDrawer();
-          }
-        },
-        child: Row(
+    return  Row(
         children: [
           isExpanded ? blackIconTile() : blackIconMenu(),
           invisibleSubMenus(),
         ],
-      ),
-    );
+      );
   }
 
   Widget blackIconTile() {
@@ -138,7 +128,7 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
             style: GoogleFonts.roboto(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
-         /* onTap: expandoOrShrinkDrawer,*/
+         onTap: expandoOrShrinkDrawer,
         ),
       );
   }
@@ -248,7 +238,7 @@ class _ComplexDrawerDState extends State<ComplexDrawerD> {
     return Padding(
       padding: const EdgeInsets.only(top: 30, bottom: 35),
       child: InkWell(
-       // onTap: expandoOrShrinkDrawer,
+        onTap: expandoOrShrinkDrawer,
         child: Container(
           height: 45,
           child: FlutterLogo(),
