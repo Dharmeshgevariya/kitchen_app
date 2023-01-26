@@ -12,7 +12,7 @@ class StoryCircle extends StatelessWidget {
     return GestureDetector(
       onTap: function,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: Container
           (height: 50,
           width: 50,

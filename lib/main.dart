@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kitchen_app/home.dart';
+import 'package:kitchen_app/sale.dart';
+import 'package:kitchen_app/video.dart';
 
 import 'ComplexDrawer.dart';
 
 import 'StoryPage.dart';
+import 'account.dart';
+import 'search.dart';
 import 'util/StroyCircle.dart';
 
 void main() {
@@ -53,21 +58,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+   int _selectedIndex =0;
 
-  void _incrementCounter() {
+  // navigate around the bottom nav bar
+  void _navigateBottomBar(int index){
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
-  void _openStory(){
-    Navigator.push(context, MaterialPageRoute(builder: (context) => StoryPage()));
-  }
+
+  // diffrent pages to navigate to
+  final List<Widget> _children=[
+    home(),
+    Search(),
+    video(),
+    sale(),
+    Account()
+  ];
+
+
+
 
 
   @override
@@ -84,24 +94,21 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 100,
-              child: ListView.builder(
-                  itemCount: 6,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return StoryCircle(
-                      function: _openStory,
-                    );
-                  }),
-            )
-          ],
-        ),
+      body: _children[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap:_navigateBottomBar,
+        elevation: 12.0,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.black,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home),label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search),label: "Search"),
+          BottomNavigationBarItem(icon: Icon(Icons.video_call),label: "Reel"),
+          BottomNavigationBarItem(icon: Icon(Icons.shop),label: "Shop"),
+          BottomNavigationBarItem(icon: Icon(Icons.person),label: "Account")
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
