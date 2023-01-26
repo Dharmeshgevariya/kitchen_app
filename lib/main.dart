@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kitchen_app/AccountPage.dart';
 
 import 'ComplexDrawer.dart';
+
+import 'StoryPage.dart';
+import 'util/StroyCircle.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,6 +65,10 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+  void _openStory(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => StoryPage()));
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -82,21 +88,23 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            SizedBox(
+              height: 100,
+              child: ListView.builder(
+                  itemCount: 6,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return StoryCircle(
+                      function: _openStory,
+                    );
+                  }),
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const ComplexDrawer()),
